@@ -126,7 +126,11 @@ li{
 
 
  @media (max-width: 550px){
-
+        
+         body{
+    	   background-size: all;
+         }
+	 
  	.fa:hover{
  		background-color: initial;
  	}
