@@ -139,3 +139,12 @@ li{
  		padding: 3rem;
  	}
  }
+
+@media (max-width: 450px){
+	header{
+	padding: 1rem;
+	min-height: 20vh;
+	margin:0.5rem auto;
+}
+
+}
