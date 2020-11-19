@@ -127,7 +127,7 @@ li{
 
  @media (max-width: 550px){
         
-         body{
+    body{
     	   background-size: all;
          }
 	 
@@ -145,6 +145,13 @@ li{
 	padding: 1rem;
 	min-height: 20vh;
 	margin:0.5rem auto;
+   }
+
 }
 
+@media (min-width: 900px){
+	header p{
+		padding-left: 10rem;
+		padding-right: 10rem;
+	}
 }
