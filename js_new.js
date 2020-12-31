@@ -1,20 +1,21 @@
 //STORING FIXED FIELDS
-var input = document.querySelector("#input");
-var list = document.querySelector("#list");
-// var submit = document.getElementsByTagName("input")[1];
-var submit = document.querySelector(`#submit`);
+let input = document.querySelector("#input");
+let list = document.querySelector("#list");
+let submit = document.querySelector(`#submit`);
 
 // ===================================================================================================
 //FUNCTION TO ADD AN LI ELEMENT TO THE LIST
-function add(inputValue){
+const add = (inputValue) => {
    //we will make a div and inside of it will be our li element
-    var block = document.createElement("div");
+    let block = document.createElement("div");
     block.className="block";
-	var li = document.createElement("li");
+	let li = document.createElement("li");
 	li.className="listElement";
 	li.appendChild(document.createTextNode(inputValue));
 	list.appendChild(block);
 	block.appendChild(li);
+
+	checkList();
 
 	//Before we empty the input field, we will store the input in the local storage
 	saveToLocalStorage(input.value);
@@ -23,8 +24,8 @@ function add(inputValue){
 	return block;
 }
 //FUNCTION TO ADD A DELETE BUTTON TO THE LIST
-function makeDelete(block){
-	var Delete = document.createElement("i");
+const makeDelete = (block) => {	
+	let Delete = document.createElement("i");
 	// Delete.className="delete";
 	Delete.className="fa fa-trash liButton";
 	Delete.setAttribute("aria-hidden","true");
@@ -34,8 +35,8 @@ function makeDelete(block){
 }
 
 //FUNCTION TO ADD A CHECK BUTTON TO THE LIST
-function makeDone(block){
-	var Done = document.createElement("i");
+const makeDone = (block) => {
+	let Done = document.createElement("i");
 	Done.className="fa fa-check liButton";
 	Done.setAttribute("aria-hidden","true");
 	// Done.appendChild(document.createTextNode("Check"));
@@ -45,13 +46,13 @@ function makeDone(block){
 // ====================================================================================================
 
 //FUNCTION TO ADD THE EVENT LISTENERS TO THE DELETE AND THE CHECK BUTTON
-function allocate_events(del,don){
-
+const allocate_events = (del, don) => {
 del.addEventListener("click",function(dlt){
     let value = dlt.target.parentElement.children[0].innerText;
 	dlt.currentTarget.parentNode.remove()
-
     deleteLocalTodos(value);
+
+    checkList();
 
 });
 
@@ -73,7 +74,7 @@ don.addEventListener("click" ,function(dne) {
 // ====================================================================================================}
 
 //ADDING EVENT LISTENERS TO THE SUBMIT BUTTON
-submit.addEventListener("click" , function(){          //for event listener, we have to first tell about the element for which this event listener is
+submit.addEventListener("click" , () => {          //for event listener, we have to first tell about the element for which this event listener is
                                                       
    if(input.value.length > 0){      //Give the alerts here
    if(input.value.trim().length === 0) {
@@ -81,7 +82,7 @@ submit.addEventListener("click" , function(){          //for event listener, we 
    	return;  
    }
    let inp = input.value;
-   var block = add(input.value);
+   let block = add(input.value);
     don = makeDone(block);
 	del = makeDelete(block);   
 	allocate_events(del,don);           
@@ -90,7 +91,7 @@ submit.addEventListener("click" , function(){          //for event listener, we 
 })
 
 //ADDING EVENT LISTENERS TO THE KEYPRESS OF ENTER
-input.addEventListener("keypress" , function(event){      //for the keypress, we have to also pass the event as a parameter which will store the information about the key pressed 
+input.addEventListener("keypress" , (event) => {      //for the keypress, we have to also pass the event as a parameter which will store the information about the key pressed 
 
    if(input.value.length > 0 && event.which === 13){
     if(input.value.trim().length === 0) {
@@ -99,16 +100,34 @@ input.addEventListener("keypress" , function(event){      //for the keypress, we
    }
 
     let inp = input.value;
-    var li = add(input.value);
+    let li = add(input.value);
     don = makeDone(li);
 	del = makeDelete(li);              
 	allocate_events(del,don);		
   }
 })
 
+
+//Function to check if list is empty
+const checkList = () => {
+	let heading = document.querySelector(`.wrapper h3`);
+
+    if(list.childElementCount === 0){
+    	heading.classList.add("hide");
+    	heading.classList.remove("show");
+    }
+    else{
+    	heading.classList.add("show");
+    	heading.classList.remove("hide");
+    }
+}
+
 //Adding Elements to Local Storage
 const saveToLocalStorage = (todo) => {
 	let todos; //Array of all todo
+
+	if(todo.length === 0)
+	return;
 
 	//Check if the todo array already exists in the local storage
 	if(localStorage.getItem("todos") === null){

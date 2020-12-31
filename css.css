@@ -155,3 +155,11 @@ li{
 		padding-right: 10rem;
 	}
 }
+
+.hide{
+	display: none;
+}
+
+.show{
+	display: block;
+}
