@@ -6,15 +6,19 @@ var submit = document.querySelector(`#submit`);
 
 // ===================================================================================================
 //FUNCTION TO ADD AN LI ELEMENT TO THE LIST
-function add(){
+function add(inputValue){
    //we will make a div and inside of it will be our li element
     var block = document.createElement("div");
     block.className="block";
 	var li = document.createElement("li");
 	li.className="listElement";
-	li.appendChild(document.createTextNode(input.value));
+	li.appendChild(document.createTextNode(inputValue));
 	list.appendChild(block);
 	block.appendChild(li);
+
+	//Before we empty the input field, we will store the input in the local storage
+	saveToLocalStorage(input.value);
+
 	input.value="";
 	return block;
 }
@@ -43,7 +47,14 @@ function makeDone(block){
 //FUNCTION TO ADD THE EVENT LISTENERS TO THE DELETE AND THE CHECK BUTTON
 function allocate_events(del,don){
 
-del.addEventListener("click",function(dlt) {dlt.currentTarget.parentNode.remove()});
+del.addEventListener("click",function(dlt){
+    let value = dlt.target.parentElement.children[0].innerText;
+	dlt.currentTarget.parentNode.remove()
+
+    deleteLocalTodos(value);
+
+});
+
 don.addEventListener("click" ,function(dne) {
 	
 	if(dne.currentTarget.parentNode.querySelector("li").style.textDecoration!="line-through"){
@@ -65,11 +76,12 @@ don.addEventListener("click" ,function(dne) {
 submit.addEventListener("click" , function(){          //for event listener, we have to first tell about the element for which this event listener is
                                                       
    if(input.value.length > 0){      //Give the alerts here
-   if(input.value==0) {
+   if(input.value.trim().length === 0) {
    	alert("Enter a valid item!");
    	return;  
    }
-   var block = add();
+   let inp = input.value;
+   var block = add(input.value);
     don = makeDone(block);
 	del = makeDelete(block);   
 	allocate_events(del,don);           
@@ -81,48 +93,70 @@ submit.addEventListener("click" , function(){          //for event listener, we 
 input.addEventListener("keypress" , function(event){      //for the keypress, we have to also pass the event as a parameter which will store the information about the key pressed 
 
    if(input.value.length > 0 && event.which === 13){
-    if(input.value==0) {
+    if(input.value.trim().length === 0) {
    	alert("Enter a valid item!");
    	return;  
    }
-    var li = add();
+
+    let inp = input.value;
+    var li = add(input.value);
     don = makeDone(li);
 	del = makeDelete(li);              
 	allocate_events(del,don);		
   }
 })
 
-// now just add the event listener to the two buttons by giving them the classes first and then completing the rest
-//Note: for applying eventListener to all the members of a class you need to loop all the array elements of the class
-//if you have a ES6 support go for the forEach method.
+//Adding Elements to Local Storage
+const saveToLocalStorage = (todo) => {
+	let todos; //Array of all todo
 
-// Adding eventListener to the Delete and Done buttons
-// var delete_list = document.getElementsByClassName("delete");
-// var done_list = document.getElementsByClassName("done");
+	//Check if the todo array already exists in the local storage
+	if(localStorage.getItem("todos") === null){
+		todos =[];
+	} else{
+		todos = JSON.parse(localStorage.getItem("todos"));
+	}
 
+	todos.push(todo);
+	localStorage.setItem("todos", JSON.stringify(todos));
+}
 
+//To get Todos from Local Storage
+const getLocalTodos = () => {
+	let todos;
 
-// function allocate_events(){
+	//Check if the todo array already exists in the local storage
+	if(localStorage.getItem("todos") === null){
+		todos =[];
+	} else{
+		todos = JSON.parse(localStorage.getItem("todos"));
+	}
 
-// var delete_list = document.getElementsByClassName("delete");
-// var done_list = document.getElementsByClassName("done");
+	todos.forEach( (todo) => {
+		let li = add(todo);
+    	don = makeDone(li);
+		del = makeDelete(li);              
+		allocate_events(del,don);
+	})
+}
 
+//To Delete Element from Local Storage
+const deleteLocalTodos = (todo) => {
+	let todos;
 
-// for(var i = 0 ; i < delete_list.length ; i++)    // here both the list have the same length 
-// {
-// 	delete_list[i].addEventListener("click",function(del) {del.currentTarget.parentNode.remove()});
-// 	done_list[i].addEventListener("click" ,function(don) {
-	
-// 	if(don.currentTarget.parentNode.style.textDecoration!="line-through")
-// 		don.currentTarget.parentNode.style.textDecoration="line-through";
-// 	else if(don.currentTarget.parentNode.style.textDecoration=="line-through")
-// 		don.currentTarget.parentNode.style.textDecoration="none";
+	//Check if the todo array already exists in the local storage
+	if(localStorage.getItem("todos") === null){
+		todos =[];
+	} else{
+		todos = JSON.parse(localStorage.getItem("todos"));
+	}
+    // todo.children[0].innerText
+	const todoElement = todo ;
+	todos.splice(todos.indexOf(todoElement), 1);
+	localStorage.setItem("todos", JSON.stringify(todos));
 
-// 	});
-// }
+}  
 
-// }
+//Event Listener for Window Load
+document.addEventListener(`DOMContentLoaded`, getLocalTodos);
 
-
-
-//Completed!!!
