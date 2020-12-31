@@ -41,9 +41,10 @@ header p{
 	display: flex;
 	/*flex-wrap: nowrap;*/
 	flex-direction: column;
-    justify-content: center;
+    /*justify-content: center;*/
     align-items: center;
-    margin-bottom: 20vh;
+    margin-bottom: 5vh;
+    min-height: 100vh;
 }
 
 .wrapper h1{
@@ -55,6 +56,7 @@ header p{
 	line-height: 30px;
 	text-align: center;
 }
+
 #input:focus{
 	outline: none;
 }
@@ -165,3 +167,45 @@ li{
 .show{
 	display: block;
 }
+
+/*----------------------------------------------------------------------------------------------*/
+
+.footer{
+    background-color:#0c0c0c;
+	text-align: center;
+	margin: auto 0;
+	padding-top: 5rem;
+    padding-bottom: 5rem;
+    color: #c1c1c1;
+}
+
+    
+   footer p:nth-child(1){
+        font-weight: lighter;
+        font-size: 2rem;
+    }
+    
+    footer p:nth-child(2){
+        margin: 2rem 0 1rem 0;
+        font-size: 1.5rem;
+        font-weight:normal;
+    }
+
+   footer a{
+        font-size: 2rem;
+        color: #c1c1c1;
+        text-decoration: none;
+        margin: 0 0.7rem;
+    }
+
+   footer #end{
+        text-align: center;
+        padding: 2rem 2rem 0rem 2rem;
+    }
+
+    footer #end #repoLink{
+            font-size:1rem;
+            margin:0 0.3rem;
+        }
+        
+    
